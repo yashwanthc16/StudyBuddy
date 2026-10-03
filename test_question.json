@@ -1,7 +1,86 @@
 [
-  {"question": "What is the difference between linear and non-linear data structures?", "expected_page": 1},
-  {"question": "What is the base case in recursion?", "expected_page": 2},
-  {"question": "What does LIFO mean and which data structure uses it?", "expected_page": 3},
-  {"question": "What is the time complexity of binary search?", "expected_page": 4},
-  {"question": "What is a binary search tree?", "expected_page": 5}
+  {
+    "question": "What are the three main objectives of an operating system?",
+    "expected_page": 4
+  },
+  {
+    "question": "What is the difference between a process and a program?",
+    "expected_page": 13
+  },
+  {
+    "question": "What are the three types of schedulers?",
+    "expected_page": 17
+  },
+  {
+    "question": "What is it called when the CPU saves one task's state and loads another's so it can switch between them?",
+    "expected_page": 18
+  },
+  {
+    "question": "Which CPU scheduling algorithm treats the ready queue as a circular queue?",
+    "expected_page": 24
+  },
+  {
+    "question": "In which multiprocessor design does every CPU run its own shared copy of the OS?",
+    "expected_page": 9
+  },
+  {
+    "question": "Why would processes want to cooperate instead of staying independent?",
+    "expected_page": 26
+  },
+  {
+    "question": "What information is kept inside a process control block?",
+    "expected_page": 15
+  },
+  {
+    "question": "What is the average waiting time in the FCFS example with processes P1 to P5?",
+    "expected_page": 21
+  },
+  {
+    "question": "Give examples of hard real-time systems where missing a deadline is critical.",
+    "expected_page": 10
+  },
+  {
+    "question": "What are the four layers in the structure of an operating system?",
+    "expected_page": 11
+  },
+  {
+    "question": "Why is the shell called a command line interpreter?",
+    "expected_page": 12
+  },
+  {
+    "question": "Why can a process move into the waiting state?",
+    "expected_page": 14
+  },
+  {
+    "question": "What is a device queue?",
+    "expected_page": 16
+  },
+  {
+    "question": "What is the main objective of the long term scheduler?",
+    "expected_page": 17
+  },
+  {
+    "question": "What is the difference between preemptive and non-preemptive scheduling?",
+    "expected_page": 19
+  },
+  {
+    "question": "How is waiting time calculated from turnaround time and burst time?",
+    "expected_page": 20
+  },
+  {
+    "question": "What is the average waiting time for non-preemptive SJF in the P1 to P4 example?",
+    "expected_page": 22
+  },
+  {
+    "question": "How does aging solve starvation in priority scheduling?",
+    "expected_page": 23
+  },
+  {
+    "question": "What are shared memory and message passing in interprocess communication?",
+    "expected_page": 26
+  },
+  {
+    "question": "What are the advantages and disadvantages of a batch operating system?",
+    "expected_page": 7
+  }
 ]
