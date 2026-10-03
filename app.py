@@ -1,8 +1,8 @@
 from langchain_groq import ChatGroq
 from langchain_community.document_loaders import PyMuPDFLoader,TextLoader
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import streamlit as st
@@ -13,16 +13,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 groq_api_key = os.getenv("GROQ_API_KEY")
-gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 
-# embedding model - fetch once, cache for future use
+# embedding model - runs locally (no API, no rate limit); load once, cache for future use
 @st.cache_resource
 def get_embedding_model():
-    return GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-001",
-        google_api_key=gemini_api_key
-    )
+    return FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 
 def format_history(history, limit=3):
@@ -70,7 +66,7 @@ with st.sidebar:
                         raise ValueError(f"Unsupported file:{ext}")    
                     texts = load_file(tmp_path)
 
-                    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+                    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
                     chunks = splitter.split_documents(texts)
 
                     if not chunks:

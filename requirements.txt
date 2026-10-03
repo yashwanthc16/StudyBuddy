@@ -8,3 +8,4 @@ langchain-text-splitters
 pymupdf
 chromadb
 python-dotenv
+fastembed
