@@ -2,7 +2,7 @@
 
 An AI-powered study assistant that lets you chat with your own PDFs — textbooks, notes, or question papers — and get answers grounded in the actual document, with page-level source citations so you can verify every answer.
 
-**Live demo:** [Add your Streamlit Cloud link here]
+**Live demo:** https://studybuddychat.streamlit.app/
 
 ---
 
@@ -52,18 +52,40 @@ User Question (chat input)
 - **Source citation** — chunk-level metadata (page number) is preserved from ingestion through to the UI, so answers are traceable back to the original document rather than being opaque LLM output.
 - **Scoped conversation memory** — only the last 3 Q&A turns are included in the prompt, rather than full history, to keep the model focused on the current thread and avoid excessive token usage.
 - **Error handling** — empty queries, unparseable/scanned PDFs, and LLM API failures are all handled explicitly with user-facing messages instead of raw stack traces.
+- **Measuring retrieval instead of assuming it works** — a small evaluation script checks whether the right page is retrieved for known questions (see [Evaluation](#evaluation)).
+
+## Evaluation
+
+`eval.py` tests the retrieval step only. For each question in a test set, it runs the top-k vector search and checks whether any retrieved chunk comes from the page that contains the answer.
+
+**Test set:** 21 questions written from a 26-page Operating Systems notes PDF (two complete units), mixing direct lookups, reworded questions, and numeric questions from worked examples.
+
+**Setup:** `chunk_size=1000`, `chunk_overlap=100`, Gemini embeddings, Chroma.
+
+| Top-k | Correct page retrieved |
+|---|---|
+| k=1 | 20/21 (95.2%) |
+| k=3 | 21/21 (100%) |
+
+**The one miss at k=1:** a worked scheduling example that is split across a page boundary. The problem statement is on page 20 and the solution is on page 21. Retrieval returned the problem statement first, which is a reasonable match for the question, and the solution page appeared within the top 3.
+
+**Caveats:** the test set is small, uses a single document, and scores retrieval at page level only. It does not evaluate the quality of the generated answers.
+
+To run it, place the PDF and question file next to `eval.py` and run `python eval.py`. Delete the `chroma_db` folder whenever you change the PDF or the chunking settings, otherwise the script reuses the old saved index.
 
 ## Known limitations
 
 - No handling for scanned/image-only PDFs (no OCR).
 - Single-document search only — can't currently query across multiple uploaded files at once.
 - Retrieval is pure vector similarity — no reranking or hybrid (keyword + vector) search yet.
-- No automated evaluation of retrieval/answer accuracy.
+- Fixed-size chunking can separate related content, such as a worked example and its solution on the next page.
+- The free Gemini embedding tier allows about 100 requests per minute, so very large PDFs can hit rate-limit errors during indexing. Batching with pauses or retries would be needed for big documents.
+- The evaluation is small and retrieval-only; generated answers are not scored.
 
 ## Running locally
 
 ```bash
-git clone https://github.com/Yashwanth-C16/StudyBuddy.git
+git clone https://github.com/yashwanthc16/StudyBuddy.git
 cd StudyBuddy
 pip install -r requirements.txt
 ```
@@ -82,13 +104,7 @@ streamlit run app.py
 ## Future improvements
 
 - Multi-document search
-- Hybrid (keyword + vector) retrieval
+- Hybrid (keyword + vector) retrieval and reranking
 - OCR support for scanned PDFs
-- Retrieval accuracy evaluation on a test question set
-
-
-## Evaluation
-
-Built a small retrieval evaluation script (`eval.py`) that tests whether the vector search 
-retrieves the correct source page for a set of known questions. On a 5-question test set 
-covering each section of a sample document, retrieval achieved 5/5 (100%) accuracy at k=3.
+- Batched embedding with retry/backoff for large PDFs
+- Larger, multi-document evaluation set, plus scoring of answer quality
