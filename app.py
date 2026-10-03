@@ -70,7 +70,7 @@ with st.sidebar:
                         raise ValueError(f"Unsupported file:{ext}")    
                     texts = load_file(tmp_path)
 
-                    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+                    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
                     chunks = splitter.split_documents(texts)
 
                     if not chunks:
