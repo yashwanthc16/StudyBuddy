@@ -13,14 +13,14 @@ with open("test_question.json") as f:
     test_cases=json.load(f)
 
 
-PDF_PATH = "Data_Structures_Notes.pdf"
+PDF_PATH = "OS_Units1-2.pdf"
 
 suffix = os.path.splitext(PDF_PATH)[1]  
 
 loader = PyMuPDFLoader(PDF_PATH)
 texts = loader.load()
 
-splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 chunks = splitter.split_documents(texts)
 
 embedding = GoogleGenerativeAIEmbeddings(
@@ -37,7 +37,7 @@ for case in test_cases:
     question = case["question"]
     expected_page = case["expected_page"]
 
-    results = db.similarity_search(question, k=3)
+    results = db.similarity_search(question, k=1)
 
     retrieved_pages = []
     for doc in results:

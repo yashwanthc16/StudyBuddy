@@ -119,7 +119,7 @@ for role, message in st.session_state.chat_history:
 
 
 # ---- new input at the bottom, chat-style ----
-query = st.chat_input("Ask something about your PDF...")
+query = st.chat_input("Ask something...")
 
 if query:
     with st.chat_message("user"):
